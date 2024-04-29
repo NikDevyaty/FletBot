@@ -17,7 +17,10 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 # from config_reader import config
 def webapp_builder() -> InlineKeyboardBuilder:
     builder = InlineKeyboardBuilder()
-    builder.button(text="lets Click!", web_app=WebAppInfo(url="..."))
+    builder.button(
+        text="lets Click!",
+        web_app=WebAppInfo(url="https://f8cd-185-97-201-64.ngrok-free.app"),
+    )
     return builder.as_markup()
 
 
@@ -26,25 +29,26 @@ router = Router()
 
 @router.message(CommandStart())
 async def start(message: Message) -> None:
-    await message.reply("Click Click", reeply_markup=webapp_builder())
+    await message.reply("Click Click", reply_markup=webapp_builder())
 
 
-# async def main() -> None:
-#     bot = Bot(config.BOT_TOKEN.get_secret_value(), parse_mode=ParseMode.HTML)
-#     dp = Dispatcher()
+async def main() -> None:
+    bot = Bot(
+        "7000256880:AAHidXEOByPasXkppLRL5ZseH74fLQGolYw", parse_mode=ParseMode.HTML
+    )
+    dp = Dispatcher()
 
-#     cluster = AsyncIOMotorClient(config.DATABASE_URL.get_secret_value())
-#     db = cluster.anonimdb
+    # cluster = AsyncIOMotorClient(config.DATABASE_URL.get_secret_value())
+    # db = cluster.anonimdb
 
-#     dp.message.middleware(CheckUser())
+    # dp.message.middleware(CheckUser())
 
-#     message_routers = setup_message_routers()
-#     callback_routers = setup_callbacks_routers()
-#     dp.include_router(message_routers)
-#     dp.include_router(callback_routers)
+    # message_routers = setup_message_routers()
+    # callback_routers = setup_callbacks_routers()
+    dp.include_router(router)
+    await bot.delete_webhook(True)
+    await dp.start_polling(bot)
 
-#     await dp.start_polling(bot, db=db)
 
-
-# if __name__ == "__main__":
-#     asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())

@@ -1,11 +1,12 @@
 import flet as ft
 import asyncio
+import random
 
 
 async def main(page: ft.Page) -> None:
-    page.title = "Mandarin Clicker"
+    page.title = "Hold clicker"
     page.theme_mode = ft.ThemeMode.DARK
-    page.bgcolor = "141221"
+    page.bgcolor = "2A459E"#"141221"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.fonts = {"Fulboargenta": "fonts/Fulborgenta.tto"}
@@ -15,15 +16,29 @@ async def main(page: ft.Page) -> None:
         score.data += 1
         score.value = str(score.data)
         image.scale = 0.95
-        score_counter.opacity = 0.5
-        score_counter.value = "+1"
+        score_counter.opacity = 50
+        score_counter.value = "+💎"
 
         score_counter.right = 0
         score_counter.bottom = 0
-        score_counter.left = event.local_y
-        score_counter.top = event.local_x
+        score_counter.left = random.randint(-20, 20)
+        score_counter.top = random.randint(-20, 20)
 
-        # progress_bar.value += 1 / 100
+        progress_bar.value += 1 / 100
+
+        if score.data % 100 == 0:
+            page.snack_bar = ft.SnackBar(
+                content=ft.Text(
+                    value="💎 +100",
+                    size=20,
+                    color="ff8b1f",
+                    text_align=ft.TextAlign.CENTER,
+                ),
+                bgcolor="25233a",
+            )
+            page.snack_bar.open = True
+            progress_bar.value = 0
+
         await page.update_async()
         await asyncio.sleep(0.1)
         image.scale = 1
@@ -61,4 +76,4 @@ async def main(page: ft.Page) -> None:
 
 
 if __name__ == "__main__":
-    ft.app(target=main, view=ft.WEB_BROWSER)
+    ft.app(target=main, view=ft.WEB_BROWSER, port=8000)
